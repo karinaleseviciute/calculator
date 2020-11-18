@@ -13,11 +13,12 @@ namespace Calculator
             if (command.ToLower().Contains("push"))
             {
                 string data = Regex.Match(command, @"\d+").Value;
-                if (!string.IsNullOrEmpty(data))
+                int pushedNumber = Int32.Parse(data);
+                if (!string.IsNullOrEmpty(data) && pushedNumber < 1024)
                 {
                     if (result.Count < 5)
                     {
-                        result.Push(Int32.Parse(data));
+                        result.Push(pushedNumber);
                     }
                     else
                     {
@@ -26,11 +27,11 @@ namespace Calculator
                 }
                 else
                 {
-                    Console.WriteLine("Only numbers are allowed to be pushed to the stack");
+                    Console.WriteLine("Input is not valid");
                 }
             }
 
-            if (command.ToLower().Contains("pop") && result.Count>0)
+            if (command.ToLower()=="pop" && result.Count>0)
             {
                 result.Pop();
             }
@@ -38,8 +39,17 @@ namespace Calculator
             if (command.ToLower() == "add")
             {
                 try {
-                    result.Push(result.Pop() + result.Pop());
 
+                    int sum = result.Pop() + result.Pop();
+                    if (sum > 1023)
+                    {
+                        sum = sum - 1023;
+                        result.Push(sum);
+                    }
+                    else
+                    {
+                        result.Push(sum);
+                    }
                     Console.WriteLine("\nResult: {0}", result.Peek());
 
                 } catch (Exception e)
@@ -56,7 +66,7 @@ namespace Calculator
 
                     if (res < 0)
                     {
-                        result.Push(1024 + res);
+                        result.Push(1023 + res);
                     }
                     else {
                         result.Push(res);
