@@ -15,7 +15,14 @@ namespace Calculator
                 string data = Regex.Match(command, @"\d+").Value;
                 if (!string.IsNullOrEmpty(data))
                 {
-                    result.Push(Int32.Parse(data));
+                    if (result.Count < 5)
+                    {
+                        result.Push(Int32.Parse(data));
+                    }
+                    else
+                    {
+                        Console.WriteLine("The maximum capacity of stack is 5");
+                    }
                 }
                 else
                 {
